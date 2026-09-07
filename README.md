@@ -1,5 +1,7 @@
 # AXIS — Android eXploration & Inspection Suite
 
+*by Davi0777s*
+
 Laboratory software platform for Android device research: USB connectivity analysis, bootloader diagnostics, boot image analysis, system telemetry, and controlled device automation.
 
 ## Abstract
@@ -25,6 +27,10 @@ Presentation layer: Qt 6 desktop interface (dashboard, diagnostics, analyzer, re
 - Single pinned runtime dependency (PySide6); dependency audit clean at release
 - Reproducible frozen build (one-dir PyInstaller with bundled Qt platform plugins); compile verification and secret scanning before publish
 
+## Key Index Terms
+
+Android Debug Bridge (ADB), Fastboot bootloader protocol, boot image forensics (`boot.img`, `vendor_boot.img`, ramdisk, DTB), SELinux enforcement, fstab mount table, build properties, Unified HID (UHID) input injection, Shizuku ADB privilege delegation, scrcpy projection and streaming encoder, GPU power levels, cpufreq governor, thermal throttling, refresh-rate (60/90/120 Hz), RRO overlay, USB device transport, Android device research, mobile security, system telemetry, recovery procedures, Android automation.
+
 ## Intended Use
 
 Research, education, and engineering validation on devices you own and are authorized to modify. Operates on a single connected device.
@@ -33,7 +39,7 @@ Research, education, and engineering validation on devices you own and are autho
 
 Windows 10/11 64-bit. No Python or source code required.
 
-1. Open the Releases page: https://github.com/Davi0777s/AXIS/releases
+1. Open the Releases page: https://github.com/Davi0777s/AXIS-Android-Research/releases
 2. Download `AXIS-Setup.exe` from the latest release.
 3. Run it. The installer fetches the application runtime and the official toolchains (Android platform-tools, scrcpy) and configures the environment automatically.
 4. Launch AXIS from the installer shortcut.
