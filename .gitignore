@@ -9,6 +9,7 @@ firmware/
 installer/
 build/
 dist/
+dist_installer/
 logs/
 tasks/
 *.py
