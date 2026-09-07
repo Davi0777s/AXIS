@@ -6,6 +6,8 @@
 
 License: MIT | Platform: Windows 10/11 | Python 3.11+ | Framework: Qt 6 (PySide6) | Tests: 81 passing
 
+License: MIT | Platform: Windows 10/11 | Python 3.11+ | Framework: Qt 6 (PySide6) | Tests: 81 passing
+
 ---
 
 ## Why AXIS (Problem → Solution)
