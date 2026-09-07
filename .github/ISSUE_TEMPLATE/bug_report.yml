@@ -1,0 +1,78 @@
+name: Bug Report
+description: Report a reproducible bug
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Please fill in all fields so we can reproduce quickly.
+  - type: input
+    id: version
+    attributes:
+      label: AXIS Version
+      description: Release tag or commit hash (e.g., v1.0.0 or commit hash)
+      placeholder: v1.0.0
+    validations:
+      required: true
+  - type: dropdown
+    id: module
+    attributes:
+      label: Affected Module
+      options:
+        - Dashboard / Device detection
+        - Launchers (Daily Use / Gaming)
+        - Gaming Tuner
+        - Boot Image Analyzer
+        - System Doctor
+        - Recovery Tools
+        - ADB / Fastboot / scrcpy integration
+        - Installer (AXIS-Setup.exe)
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Minimal, precise steps
+      placeholder: |
+        1. Connect device in state X
+        2. Click Y
+        3. Observe Z
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      placeholder: What should happen
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      placeholder: What actually happens (error, crash, wrong output)
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / Screenshots
+      description: Paste relevant logs or describe UI state
+      render: text
+  - type: input
+    id: android
+    attributes:
+      label: Android Version / Device
+      placeholder: e.g., Android 13, Pixel 7
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I tested on the latest release
+          required: true
+        - label: I searched existing issues first
+          required: true

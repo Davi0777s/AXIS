@@ -1,0 +1,56 @@
+name: Feature Request
+description: Suggest a new capability within scope
+title: "[Feature]: "
+labels: ["feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        AXIS is a focused laboratory tool. Propose features that align with its scope: ADB/Fastboot diagnostics, boot image analysis, system telemetry, recovery, automation.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: What user problem does this solve?
+      placeholder: |
+        As a [persona], I need to [action], because [reason].
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the feature and how it fits the existing modules
+    validations:
+      required: true
+  - type: dropdown
+    id: module
+    attributes:
+      label: Target Module
+      options:
+        - Dashboard / Device detection
+        - Launchers
+        - Gaming Tuner
+        - Boot Image Analyzer
+        - System Doctor
+        - Recovery Tools
+        - Installer
+        - Core (runner, device manager)
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Other approaches you evaluated and why they were rejected
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope Check
+      options:
+        - label: This aligns with AXIS laboratory scope (ADB/Fastboot, boot analysis, telemetry, recovery, automation)
+          required: true
+        - label: This does not require Linux/macOS support (Windows only)
+          required: true
+        - label: This does not add new runtime dependencies beyond PySide6
+          required: true

@@ -1,0 +1,112 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-test:
+    runs-on: windows-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Compile check
+        run: python -m compileall -q axis.py src
+
+      - name: Run tests (offscreen)
+        env:
+          QT_QPA_PLATFORM: offscreen
+          PYTHONIOENCODING: utf-8
+        run: |
+          python -m unittest discover -s tests -v
+
+      - name: Secret scan
+        run: |
+          python - <<'PY'
+import re, sys, pathlib
+patterns = [r'gh[opsu]_[A-Za-z0-9_]{36,}', r'BEGIN (RSA|EC|DSA|OPENSSH) PRIVATE KEY', r'api[_-]?key\s*[=:]\s*["\'][A-Za-z0-9_-]{20,}["\']']
+files = list(pathlib.Path('.').rglob('*.py')) + list(pathlib.Path('.').rglob('*.md')) + list(pathlib.Path('.').rglob('*.yml'))
+found = False
+for f in files:
+    if any(p in str(f) for p in ('.git', '__pycache__', 'dist', 'build', '.venv', 'venv')):
+        continue
+    try:
+        text = f.read_text(encoding='utf-8')
+    except Exception:
+        continue
+    for p in patterns:
+        if re.search(p, text):
+            print(f'[SECRET] {f}: matches {p}')
+            found = True
+if found:
+    sys.exit(1)
+print('Secret scan: clean')
+PY
+
+  # Build artifacts only on main
+  build:
+    needs: lint-test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build executable
+        run: python -m PyInstaller --noconfirm AXIS.spec
+
+      - name: Package runtime
+        run: |
+          $root = "${{ github.workspace }}"
+          $dist = "$root\dist\AXIS"
+          foreach ($d in @("scripts","wifi-fix","tools","firmware")) {
+            if (Test-Path -LiteralPath "$root\$d") {
+              Copy-Item -LiteralPath "$root\$d" -Destination $dist -Recurse -Force
+            }
+          }
+          Copy-Item -LiteralPath "$root\axis.toml" -Destination $dist -Force
+          Copy-Item -LiteralPath "$root\assets" -Destination $dist -Recurse -Force
+          Copy-Item -LiteralPath "$root\README.md" -Destination $dist -Force
+
+      - name: Create release zip
+        run: |
+          Add-Type -AssemblyName System.IO.Compression.FileSystem
+          $src = "${{ github.workspace }}\dist\AXIS"
+          $zip = "${{ github.workspace }}\dist\AXIS-v${{ github.run_number }}.zip"
+          [System.IO.Compression.ZipFile]::CreateFromDirectory($src, $zip, [System.IO.Compression.CompressionLevel]::Optimal, $false)
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: AXIS-runtime
+          path: dist/AXIS-v${{ github.run_number }}.zip
+          retention-days: 30

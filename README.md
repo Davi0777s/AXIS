@@ -11,6 +11,7 @@
 [![Tests](https://img.shields.io/badge/Tests-81%20passing-brightgreen.svg)]
 [![Release](https://img.shields.io/github/v/release/Davi0777s/AXIS-Android-Research?display_name=tag&sort=semver)]
 [![Security Policy](https://img.shields.io/badge/Security-Policy-blue.svg)](SECURITY.md)
+[![CI](https://github.com/Davi0777s/AXIS-Android-Research/actions/workflows/ci.yml/badge.svg)](https://github.com/Davi0777s/AXIS-Android-Research/actions/workflows/ci.yml)
 
 License: MIT | Platform: Windows 10/11 | Python 3.11+ | Framework: Qt 6 (PySide6) | Tests: 81 passing
 
@@ -100,6 +101,76 @@ Target personas: Security researchers, mobile developers, device testers, CTF pl
 - Lock Credential Removal: gatekeeper/locksettings wipe (explicit confirmation)
 - Screen Unlock: gesture/PIN/pattern removal
 - RRO Overlay Registration: dynamic resource overlays
+
+---
+
+## Architecture
+
+### System Overview
+
+```mermaid
+graph TD
+    subgraph Presentation["Presentation Layer (Qt 6 / PySide6)"]
+        Dashboard[Dashboard]
+        Launchers[Launchers]
+        Tuner[Gaming Tuner]
+        Analyzer[Boot Analyzer]
+        Doctor[System Doctor]
+        Recovery[Recovery Tools]
+    end
+
+    subgraph Domain["Domain Layer"]
+        DevMgr[Device Manager]
+        ScrRunner[Script Runner]
+        RecoveryCtrl[Recovery Controllers]
+    end
+
+    subgraph Integration["Integration Layer"]
+        ADB[ADB]
+        Fastboot[Fastboot]
+        Scrcpy[scrcpy]
+        Bash[Bash Helpers]
+    end
+
+    Presentation --> Domain
+    Domain --> Integration
+    Integration -.-> Android[(Android Device)]
+
+    style Presentation fill:#e3f2fd,stroke:#1565c0
+    style Domain fill:#f3e5f5,stroke:#7b1fa2
+    style Integration fill:#e8f5e9,stroke:#2e7d32
+    style Android fill:#fff3e0,stroke:#e65100
+```
+
+### ADB Authorization Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Dashboard
+    participant DevMgr as Device Manager
+    participant ADB as ADB Client
+    participant Device as Android Device
+
+    User->>Dashboard: Connect device
+    Dashboard->>DevMgr: poll_device()
+    DevMgr->>ADB: adb devices
+    ADB-->>DevMgr: device list + state
+    alt state == unauthorized
+        DevMgr-->>Dashboard: unauthorized
+        Dashboard-->>User: Show "Autorización ADB" button
+        User->>Dashboard: Click repair
+        Dashboard->>DevMgr: run_script(fix_auth.sh)
+        DevMgr->>Bash: fix_auth.sh (custom recovery)
+        Bash->>Device: Fastboot boot recovery
+        Device-->>Bash: ADB authorized
+        Bash-->>DevMgr: success
+        DevMgr-->>Dashboard: device authorized
+    else state == device
+        DevMgr-->>Dashboard: device connected
+        Dashboard-->>User: Show "Daily Use" CTA
+    end
+```
 
 ---
 

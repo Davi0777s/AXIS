@@ -1,0 +1,54 @@
+name: "Pull Request"
+description: "Describe your changes"
+title: "[PR]: "
+body:
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-merge Checklist
+      options:
+        - label: All 81 tests pass locally (`python -m unittest discover -s tests`)
+          required: true
+        - label: Code compiles clean (`python -m compileall -q axis.py src`)
+          required: true
+        - label: No new dependencies added (or justified in PR description)
+          required: true
+        - label: No secrets introduced (ran secret scan)
+          required: true
+        - label: CHANGELOG.md updated (if user-facing change)
+          required: true
+        - label: README updated (if user-facing change)
+          required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What does this PR change and why?
+      placeholder: |
+        - Changed X to fix Y
+        - Added Z for W
+    validations:
+      required: true
+  - type: textarea
+    id: testing
+    attributes:
+      label: Testing Performed
+      description: How did you verify the change?
+      placeholder: |
+        - Ran full test suite: 81/81 pass
+        - Manual test: connected device, verified dashboard state
+    validations:
+      required: true
+  - type: dropdown
+    id: type
+    attributes:
+      label: Change Type
+      options:
+        - Bug fix
+        - Feature
+        - Refactor
+        - Docs
+        - CI/Build
+        - Tests
+    validations:
+      required: true
