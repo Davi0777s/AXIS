@@ -4,7 +4,13 @@
 
 **Laboratory software platform for Android device research:** USB connectivity analysis, bootloader diagnostics, boot image analysis, system telemetry, and controlled device automation.
 
-License: MIT | Platform: Windows 10/11 | Python 3.11+ | Framework: Qt 6 (PySide6) | Tests: 81 passing
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Platform](https://img.shields.io/badge/Platform-Windows%2010%2F11-blue.svg)]
+[![Python](https://img.shields.io/badge/Python-3.11%2B-blue.svg)]
+[![Framework](https://img.shields.io/badge/Framework-Qt%206%20(PySide6)-green.svg)]
+[![Tests](https://img.shields.io/badge/Tests-81%20passing-brightgreen.svg)]
+[![Release](https://img.shields.io/github/v/release/Davi0777s/AXIS-Android-Research?display_name=tag&sort=semver)]
+[![Security Policy](https://img.shields.io/badge/Security-Policy-blue.svg)](SECURITY.md)
 
 License: MIT | Platform: Windows 10/11 | Python 3.11+ | Framework: Qt 6 (PySide6) | Tests: 81 passing
 
