@@ -53,7 +53,14 @@ Installation and usage are covered in the release notes.
 
 ## Download and Install
 
-Windows 10/11 64-bit. Download `AXIS-Setup.exe` from Releases and run it. The installer downloads the application runtime and the required toolchains (adb, fastboot, scrcpy) from their official sources, installs them, and creates shortcuts. No Python or source code required.
+Windows 10/11 64-bit. No Python or source code required.
+
+1. Open the Releases page: https://github.com/Davi0777s/AXIS/releases
+2. Download `AXIS-Setup.exe` from the latest release.
+3. Run it. The installer downloads the application runtime and the required toolchains (adb, fastboot, scrcpy) from their official sources, installs under `%LOCALAPPDATA%\Programs\AXIS`, and creates Start Menu and Desktop shortcuts.
+4. Launch AXIS from the shortcut or the installer's final prompt.
+
+Git for Windows is recommended for the helper toolchain.
 
 ## License and Disclaimer
 
