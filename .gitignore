@@ -1,0 +1,37 @@
+# Local development tree — kept out of the public repository
+src/
+tests/
+scripts/
+wifi-fix/
+assets/
+tools/
+firmware/
+installer/
+build/
+dist/
+logs/
+tasks/
+*.py
+*.cmd
+*.toml
+*.spec
+requirements.txt
+*.sh
+build_exe.ps1
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Secrets — never commit
+.env
+.env.*
+*.pem
+*.key
+
+# OS / desktop
+Thumbs.db
+Desktop.ini
+*.lnk
