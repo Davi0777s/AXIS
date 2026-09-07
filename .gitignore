@@ -6,6 +6,7 @@ wifi-fix/
 assets/
 tools/
 firmware/
+docs/
 installer/
 build/
 dist/

@@ -1,55 +1,33 @@
 # AXIS — Android eXploration & Inspection Suite
 
-Engineering laboratory on desktop software for Android device connectivity, diagnostics, recovery, and automation. This repository presents the project, its scope, and its deliverables. Source code is not published.
+Laboratory software platform for Android device research: USB connectivity analysis, bootloader diagnostics, boot image analysis, system telemetry, and controlled device automation.
 
-## Project Objective
+## Abstract
 
-AXIS is a complete laboratory project engineered from scratch: a Windows desktop application that inspects, diagnoses, and operates an Android device through ADB, Fastboot, and screen mirroring. It demonstrates end-to-end engineering: system integration with external toolchains, binary-level boot image analysis, reactive UIs, secure subprocess handling, and shipping a portable, self-installing product.
+AXIS is an offline research instrument that interrogates an Android device over its USB transport using the ADB (Android Debug Bridge) and Fastboot (bootloader) protocols, augmented with screen mirroring (scrcpy), HID input injection (UHID), and privileged automation (Shizuku). It is engineered as a laboratory toolset for device characterization, boot-chain inspection, recovery procedures, and reproducible experiment automation on hardware under explicit operator authorization.
 
-Fully offline. Operates on a single device at a time. Everything required to run the product is handled by its installer.
+## Research & Experimental Capabilities
 
-## Scope
+- **Transport-layer diagnostics** — ADB state machine (device / unauthorized / offline) with Fastboot bootloader fallback and credential-repair workflows
+- **Boot image analysis** — structural parsing of Android boot images (`boot.img` / `vendor_boot.img`), header layout, ramdisk, DTB payload boundaries
+- **System telemetry** — SELinux enforcement state, fstab mount table, build properties, root status, storage topology, battery and power subsystem readings
+- **Execution & performance instrumentation** — cpufreq governor, thermal throttling state, GPU power levels, UI animation policy, refresh-rate (60/90/120 Hz) constraints, encoder resolution/FPS tuning for mirroring
+- **Automation primitives** — UHID mouse/keyboard injection, Shizuku ADB privilege delegation, screen projection profiles (daily use / gaming)
+- **Recovery toolchain** — WiFi SAE / enterprise network fix, lock-credential removal, screen unlock, RRO overlay registrations
 
-- Device state diagnostics over ADB and Fastboot, including authorization recovery
-- Boot image analysis: header and payload parsing of `boot.img` / `vendor_boot_b.img`
-- System diagnostics: SELinux, fstab, props, root, storage, battery
-- Recovery operations: WiFi SAE fix, credential removal, screen unlock
-- Daily-use and gaming automations: screen mirroring, input mapping (UHID), Shizuku, performance tuning
-- Real-time gaming tuner: stream resolution, frame rate, GPU and CPU power control
-- Portable Windows executable, installed and provisioned by a self-contained installer
+## Architecture
 
-## Architecture Overview
+Presentation layer: Qt 6 desktop interface (dashboard, diagnostics, analyzer, recovery, tuning). Domain layer: device manager, script runner, recovery controllers. Integration layer: ADB, Fastboot, scrcpy toolchains and an isolated helper set. Subprocesses run with sanitized environments and positional arguments; device-supplied strings are treated as untrusted input and rendered in plain text. Fully offline: no telemetry, no runtime network calls.
 
-Thin three-tier design:
+## Engineering Methodology
 
-- Presentation layer: Qt 6 desktop UI (dashboard, launchers, tuner, analyzer, doctor, recovery)
-- Domain logic: device manager, script runner, recovery controllers, diagnostics
-- Integration layer: ADB / Fastboot / scrcpy toolchains and a bash helper toolchain
+- 81 automated tests spanning UI, runner, device, analyzer, recovery, and assets
+- Single pinned runtime dependency (PySide6); dependency audit clean at release
+- Reproducible frozen build (one-dir PyInstaller with bundled Qt platform plugins); compile verification and secret scanning before publish
 
-Engineering decisions by design:
+## Intended Use
 
-- The product carries its own adb/fastboot/scrcpy; host `PATH` is sanitized so foreign builds cannot interfere (port 5037 ownership)
-- Helper scripts run with positional parameters only; no shell interpolation of untrusted input
-- Device-provided strings are validated and rendered as plain text
-- Recovery operations require explicit confirmation; destructive actions are gated
-- Runtime configuration in a single editable file; logs in the OS temp directory
-- Frozen-mode detection so the executable is fully self-contained
-
-## Engineering Practices
-
-- 77 automated tests across UI, runner, device layer, analyzer, recovery, and assets
-- Dependency surface pinned to a single runtime library, audited clean at release
-- Reproducible build: one-dir executable with bundled Qt platform plugins
-- CI-grade hygiene: compile checks, full suite run, secret scan before publish
-
-## Preview
-
-Project visuals:
-
-![Preview 1](docs/portada.png)
-![Preview 2](docs/personalizacion.png)
-
-Installation and usage are covered in the release notes.
+Research, education, and engineering validation on devices you own and are authorized to modify. Operates on a single connected device.
 
 ## Download and Install
 
@@ -57,13 +35,11 @@ Windows 10/11 64-bit. No Python or source code required.
 
 1. Open the Releases page: https://github.com/Davi0777s/AXIS/releases
 2. Download `AXIS-Setup.exe` from the latest release.
-3. Run it. The installer downloads the application runtime and the required toolchains (adb, fastboot, scrcpy) from their official sources, installs under `%LOCALAPPDATA%\Programs\AXIS`, and creates Start Menu and Desktop shortcuts.
-4. Launch AXIS from the shortcut or the installer's final prompt.
+3. Run it. The installer fetches the application runtime and the official toolchains (Android platform-tools, scrcpy) and configures the environment automatically.
+4. Launch AXIS from the installer shortcut.
 
-Git for Windows is recommended for the helper toolchain.
+## License & Research Disclaimer
 
-## License and Disclaimer
+MIT. Binaries and toolchains are distributed from their official sources. See LICENSE.
 
-MIT. Intended for research and education on devices you own.
-
-AXIS is provided "as is", without warranty of any kind, express or implied. You assume full responsibility for every operation it performs, including credential removal, overlay installation, and flashing. In no event shall the author be liable for any claim, damage, or loss arising from its use. This repository and its releases are provided for learning and engineering-showcase purposes.
+AXIS is provided "as is", without warranty of any kind, express or implied. It is intended for experimentation on devices you own and are authorized to access. You are solely responsible for every operation performed, including credential removal, overlay installation, and flashing. The author accepts no liability for any damage, data loss, or unauthorized use resulting from the software.
