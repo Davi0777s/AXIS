@@ -10,10 +10,16 @@ jobs:
   lint-test:
     runs-on: windows-latest
     timeout-minutes: 20
+    defaults:
+      run:
+        # Tests assert a self-contained "AXIS" root (matching a portable install).
+        working-directory: AXIS
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          path: AXIS
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -25,6 +31,21 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
+      - name: Provision runtime tools (adb + scrcpy)
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path tools | Out-Null
+          $ptZip = "tools\platform-tools.zip"
+          Invoke-WebRequest -Uri "https://dl.google.com/android/repository/platform-tools-latest-windows.zip" -OutFile $ptZip
+          Expand-Archive -LiteralPath $ptZip -DestinationPath "tools" -Force
+          Remove-Item $ptZip -Force
+          $release = Invoke-RestMethod -Uri "https://api.github.com/repos/genymobile/scrcpy/releases/latest" -Headers @{ "User-Agent" = "AXIS-CI" }
+          $asset = $release.assets | Where-Object { $_.name -like "scrcpy-win64-*.zip" } | Sort-Object size -Descending | Select-Object -First 1
+          $scrcpyZip = "tools\scrcpy.zip"
+          Invoke-WebRequest -Uri $asset.browser_download_url -OutFile $scrcpyZip
+          Expand-Archive -LiteralPath $scrcpyZip -DestinationPath "tools" -Force
+          Remove-Item $scrcpyZip -Force
 
       - name: Compile check
         run: python -m compileall -q axis.py src
