@@ -1,0 +1,13 @@
+[device]
+codename = ""
+serial = ""
+
+[paths]
+firmware = "firmware"
+build = "build"
+logs = "logs"
+tools = "tools"
+
+[build]
+header_version = 4
+compress = "gzip"

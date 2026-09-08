@@ -1,25 +1,15 @@
-# Local development tree — kept out of the public repository
-src/
-tests/
-scripts/
-wifi-fix/
-assets/
-tools/
-firmware/
-docs/
-installer/
+# Build outputs
 build/
 dist/
 dist_installer/
 logs/
+
+# Runtime-provisioned toolchains and user-supplied binaries
+tools/
+firmware/
+
+# Agent scratch
 tasks/
-*.py
-*.cmd
-*.toml
-*.spec
-requirements.txt
-*.sh
-build_exe.ps1
 
 # Python
 __pycache__/
